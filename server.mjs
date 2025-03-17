@@ -606,6 +606,12 @@ const router = new Router(corsMiddleware);
 router.register('GET', /^\/(?!api\/).*$/, staticHandler);
 router.register('GET', '/api/reload', sseReloadHandler);
 
+router.register('POST', '/api/test/blob', (req, res) => {
+    console.log(req.headers['x-total-parts'], req.headers['x-part-no'])
+    res.writeHead(200);
+    res.end('ok');
+}, blobMiddleware);
+
 router.register('GET', '/api/test/message', (req, res) => {
     longPollingClients.forEach((client) => client('message'));
 
