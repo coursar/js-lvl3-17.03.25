@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <title>Document</title>
+    <style>
+        .draggable {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            z-index: 999;
+        }
+        .dropzone {
+            height: 500px;
+            border: 1px dashed red;
+        }
+
+        .active {
+            background-color: blueviolet;
+        }
+    </style>
+</head>
+<body>
+    <div id="draggable" class="draggable" draggable="true">draggable</div>
+    <div id="dropzone" class="dropzone"></div>
+
+    <script src="dnd.mjs" type="module"></script>
+    <script>
+        // live-reload
+        {
+            const sse = new EventSource('/api/reload');
+            sse.addEventListener('message', (ev) => {
+                if (ev.data === 'reload') {
+                    window.location.reload();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
