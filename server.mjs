@@ -612,6 +612,25 @@ router.register('POST', '/api/test/blob', (req, res) => {
     res.end('ok');
 }, blobMiddleware);
 
+router.register('GET', '/api/test/chunked', (req, res) => {
+    res.writeHead(200, {
+        'content-type': 'application/magic',
+    });
+    res.flushHeaders();
+
+    setTimeout(() => {
+        res.write('first line\n');
+    }, 5000);
+
+    setTimeout(() => {
+        res.write('second line\n');
+    }, 10_000);
+
+    setTimeout(() => {
+        res.end('last line\n');
+    }, 15_000);
+});
+
 router.register('GET', '/api/test/message', (req, res) => {
     longPollingClients.forEach((client) => client('message'));
 
