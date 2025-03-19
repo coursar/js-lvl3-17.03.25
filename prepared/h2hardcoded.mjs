@@ -1,0 +1,1 @@
+export const initialSettings = Buffer.from('000012040000000000000300000064000400a00000000200000000', 'hex');

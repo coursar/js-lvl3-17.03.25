@@ -1,5 +1,4 @@
 import net from 'node:net';
-import { buffer } from 'node:stream/consumers';
 
 const server = new net.Server();
 
