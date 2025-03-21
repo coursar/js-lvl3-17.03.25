@@ -1,0 +1,11 @@
+services:
+  envoy:
+    image: envoyproxy/envoy:v1.22-latest
+    ports:
+      - 8080:8080
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./envoy.yml:/etc/envoy/envoy.yaml:ro
+      - ../../../tls/server.crt:/etc/server.crt:ro
+      - ../../../tls/server.key:/etc/server.key:ro

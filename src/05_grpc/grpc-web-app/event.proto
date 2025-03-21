@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+// package lectiongrpc.event.v1;
+// option go_package = "lectiongrpc/pkg/event/v1";
+
+service EventService {
+  rpc Unary (EventRequest) returns (EventResponse);
+  rpc ServerStream (EventRequest) returns (stream EventResponse);
+  rpc ClientStream (stream EventRequest) returns (EventResponse);
+  rpc BidirectionalStream (stream EventRequest) returns (stream EventResponse);
+}
+
+message EventRequest {
+  int64 id = 1;
+  string data = 2;
+}
+
+message EventResponse {
+  int64 id = 1;
+  string data = 2;
+}

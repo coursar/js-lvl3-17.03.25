@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- https://www.npmjs.com/package/graphql-http -->
+    <script src="https://unpkg.com/graphql-http/umd/graphql-http.min.js"></script>
+    <script>
+        const client = graphqlHttp.createClient({
+            url: '/graphql',
+        });
+        client.subscribe({query: '#graphql { products { id title } }'}, {
+            next(data) {
+                console.log(data);
+            },
+            error(err) {
+                console.warn(err);
+            },
+            complete() {
+                console.info('complete');
+            },
+        })
+    </script>
+</body>
+</html>

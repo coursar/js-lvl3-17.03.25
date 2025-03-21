@@ -24,6 +24,9 @@
                 "<node_internals>/**"
             ],
             // TODO: add TLS options
+            "env": {
+                "NODE_OPTIONS": "--tls-keylog=keylogfile.txt"
+            }
         }
     ]
 }

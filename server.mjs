@@ -366,12 +366,12 @@ const longPollingHandler = (req, res) => {
 
 const sseClients = new Set();
 const sseHandler = (req, res) => {
-    if (!req.headers['accept']?.startsWith('text/event-stream')) {
-        res.statusCode = 400;
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify({ error: 'bad request' }));
-        return;
-    }
+    // if (!req.headers['accept']?.startsWith('text/event-stream')) {
+    //     res.statusCode = 400;
+    //     res.setHeader('Content-Type', 'application/json');
+    //     res.end(JSON.stringify({ error: 'bad request' }));
+    //     return;
+    // }
 
     res.statusCode = 200;
     res.setHeader('Cache-Control', 'no-cache');
@@ -379,7 +379,9 @@ const sseHandler = (req, res) => {
     res.flushHeaders();
 
     const subscriber = (data) => {
-        res.write(Buffer.from(`event: message\ndata: ${data}\n\n`, 'utf8'));
+        res.write(Buffer.from(`id:${Date.now()}\nevent: message\ndata: ${data}\n\n`, 'utf8'));
+        // res.write(Buffer.from(`id:${Date.now()}\nevent: message\n`, 'utf8'));
+        // setTimeout(() => res.write(Buffer.from(`data: ${data}\n\n`, 'utf8')), 5000);
     };
     sseClients.add(subscriber);
 
@@ -630,6 +632,39 @@ router.register('GET', '/api/test/chunked', (req, res) => {
         res.end('last line\n');
     }, 15_000);
 });
+
+router.register('POST', '/api/test/progress', (req, res) => {
+    res.writeHead(200, {
+        'content-type': 'application/octet-stream',
+        'content-length': 90, // => HTTP/1.1 Transfer-Encoding: chunked
+    });
+    res.flushHeaders();
+
+    setTimeout(() => {
+        res.write('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+    }, 5000);
+
+    setTimeout(() => {
+        res.write('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
+    }, 10_000);
+
+    setTimeout(() => {
+        res.write('cccccccccccccccccccccccccccccc');
+    }, 15_000);
+});
+
+// GET/POST/other
+router.register('GET', '/api/test/poll', (req, res) => {
+    console.log('new poll request');
+    res.writeHead(200);
+    res.end('no updates');
+});
+// GET/POST/other
+router.register('GET', '/api/test/long-poll', longPollingHandler);
+
+// only GET
+router.register('GET', '/api/test/sse', sseHandler);
+
 
 router.register('GET', '/api/test/message', (req, res) => {
     longPollingClients.forEach((client) => client('message'));
